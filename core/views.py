@@ -302,18 +302,22 @@ def signup(request):
         return render(request, 'signup.html')
 
 def order_summary(request):
-    user_profile = Profile.objects.get(user=request.user)
+    if request.user.is_authenticated:
+        user_profile = Profile.objects.get(user=request.user)
 
-    try:
-        order = Order.objects.get(user = request.user, ordered = False)
-        context = {
-            'object': order,
-            'user_profile': user_profile
-        }
-        return render(request, 'order_summary.html', context)
-    except ObjectDoesNotExist:
-        messages.error(request, "Your Cart is empty")
-        return redirect("/")
+        try:
+            order = Order.objects.get(user = request.user, ordered = False)
+            context = {
+                'object': order,
+                'user_profile': user_profile
+            }
+            return render(request, 'order_summary.html', context)
+        except ObjectDoesNotExist:
+            messages.error(request, "Your Cart is empty")
+            return redirect("/")
+    else:
+        messages.info(request, "You need to signin")
+        return redirect('/login')
 
 def checkout(request):
     order = Order.objects.get(user=request.user, ordered=False)
