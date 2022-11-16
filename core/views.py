@@ -138,42 +138,77 @@ def delete_post(request,pk):
         return redirect('/')
 
 def search(request):
-    user_object = User.objects.get(username=request.user.username)
-    user_profile = Profile.objects.get(user=user_object)
+    if request.user.is_authenticated:
+        user_object = User.objects.get(username=request.user.username)
+        user_profile = Profile.objects.get(user=user_object)
 
-    if request.method == 'POST':
-        search = request.POST['search']
-        username_object = User.objects.filter(username__icontains=search)
-        post_titles_object = Post.objects.filter(title__icontains=search)
-        post_categories_object = Post.objects.filter(category__icontains=search)
+        if request.method == 'POST':
+            search = request.POST['search']
+            username_object = User.objects.filter(username__icontains=search)
+            post_titles_object = Post.objects.filter(title__icontains=search)
+            post_categories_object = Post.objects.filter(category__icontains=search)
 
-        username_profile = []
-        username_profile_list = []
-        posts = []
-        total_posts_list = []
+            username_profile = []
+            username_profile_list = []
+            posts = []
+            total_posts_list = []
 
-        for users in username_object:
-            username_profile.append(users.id)
+            for users in username_object:
+                username_profile.append(users.id)
 
-        for post in post_titles_object:
-            posts.append(post.id)
+            for post in post_titles_object:
+                posts.append(post.id)
 
-        for post in post_categories_object:
-            posts.append(post.id)
+            for post in post_categories_object:
+                posts.append(post.id)
 
-        for ids in posts:
-            post_lists = Post.objects.filter(id=ids)
-            total_posts_list.append(post_lists)
+            for ids in posts:
+                post_lists = Post.objects.filter(id=ids)
+                total_posts_list.append(post_lists)
 
-        for ids in username_profile:
-            profile_lists = Profile.objects.filter(id_user=ids)
-            username_profile_list.append(profile_lists)
-       
-        combined_list = list(chain(username_profile_list, total_posts_list))
-        combined_list = list(chain(*combined_list))
+            for ids in username_profile:
+                profile_lists = Profile.objects.filter(id_user=ids)
+                username_profile_list.append(profile_lists)
+        
+            combined_list = list(chain(username_profile_list, total_posts_list))
+            combined_list = list(chain(*combined_list))
 
 
-    return render(request, 'search.html', {'user_profile': user_profile, 'combined_list': combined_list})
+        return render(request, 'search.html', {'user_profile': user_profile, 'combined_list': combined_list})
+    else:
+        if request.method == 'POST':
+            search = request.POST['search']
+            username_object = User.objects.filter(username__icontains=search)
+            post_titles_object = Post.objects.filter(title__icontains=search)
+            post_categories_object = Post.objects.filter(category__icontains=search)
+
+            username_profile = []
+            username_profile_list = []
+            posts = []
+            total_posts_list = []
+
+            for users in username_object:
+                username_profile.append(users.id)
+
+            for post in post_titles_object:
+                posts.append(post.id)
+
+            for post in post_categories_object:
+                posts.append(post.id)
+
+            for ids in posts:
+                post_lists = Post.objects.filter(id=ids)
+                total_posts_list.append(post_lists)
+
+            for ids in username_profile:
+                profile_lists = Profile.objects.filter(id_user=ids)
+                username_profile_list.append(profile_lists)
+        
+            combined_list = list(chain(username_profile_list, total_posts_list))
+            combined_list = list(chain(*combined_list))
+
+
+        return render(request, 'search.html', {'combined_list': combined_list})
 
 def profile(request, pk):
     user_object = User.objects.get(username=pk)
