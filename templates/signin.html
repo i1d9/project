@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="row auth-form">
+    <div class="s12 m12 l6 xl6">
+        <h1><blockquote class="text-brown text-darken-4">Log in</blockquote></h1>
+        
+        <div>
+            {% for message in messages %}
+            <h5 class="warning">{{message}}</h5>
+            {% endfor %}
+        </div>
+        
+        <form class="col s12" action="" method="POST">
+            {% csrf_token %}
+            <div class="input-field">
+                <input id="username" type="text" name="username">
+                <label for="username">Name or Business Name</label>
+            </div>
+            <div class="input-field">
+                <input id="password" type="password" name="password">
+                <label for="password">Password</label>
+            </div>    
+            <button type="submit" class="waves-effect blue-grey darken-3 waves-light btn">Login</button>
+            <div class="center">
+                <p class="text-base"> Not registered? <a href="/signup" class=""> Create a account </a></p>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

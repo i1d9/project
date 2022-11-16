@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+
+{% block content %}
+
+<div class="container">
+  <h2 class="center">Checkout form</h2>
+  <div class="row">
+    <div class="col m8 s12">
+      <form method="POST">
+        {% csrf_token %}
+        
+        <blockquote>Location of Delivery</blockquote>
+        <div class="input-field">
+          <input id="address" type="text" name="address" required>
+          <label for="address">Address</label>
+        </div>
+        
+        <blockquote>Contact Information</blockquote>
+        <div class="input-field">
+          <input id="contact" type="number" name="contact" required>
+          <label for="contact">Phone Number</label>
+        </div>
+        
+        <blockquote>Means of Payment</blockquote>
+        <div>
+          <p>
+            <label>
+              <input class="blue-grey darken-3" id="payment" name="payment" value="Mobile Money" type="radio" checked />
+              <span class="blue-grey-text text-darken-2">Mobile Money</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="blue-grey-text text-darken-3" name="payment" value="Cash"  type="radio" />
+              <span class="blue-grey-text text-darken-2">Cash</span>
+            </label>
+          </p>
+        </div>
+        
+        <button class="waves-effect waves-light btn yellow darken-4"type="submit">Continue to checkout</button>
+        
+      </form>      
+    </div>
+    
+    <div class="col m4 s12">
+      <ul class="collapsible">
+        <li>
+          <div class="collapsible-header white-text blue-grey darken-2">
+            <i class="material-icons white-text">shopping_cart</i>
+            Your Cart
+            <span class="new badge yellow darken-4" data-badge-caption="Items">{{ order.items.count }}</span>
+        </li>
+      </ul>
+      
+      <ul class="collection">
+        {% for order_item in order.items.all %}
+        <li class="collection-item avatar">
+          <img src="{{order_item.item.image.url}}" alt="" class="circle">
+          <span class="title">{{ order_item.quantity }} x {{ order_item.item.title }}</span>
+          <p>Ksh {{ order_item.item.price }}</p>
+          <a class="secondary-content">{{ order_item.get_final_price }}</a>
+        </li>
+        {% endfor %}
+        
+        <li class="collection-item">
+          Total (USD)
+          <a class="secondary-content black-text" >{{ order.get_total_price }}</a class="secondary" >
+          </li>
+        </ul>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+  {% endblock content %}

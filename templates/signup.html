@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="row auth-form">
+    <div class="s12 m12 l6 xl6">
+        <h1><blockquote class="text-brown text-darken-4">Sign Up</blockquote></h1>
+        
+        <div>
+            {% for message in messages %}
+            <h5 class="warning">{{message}}</h5>
+            {% endfor %}
+        </div>
+        
+        <form class="col s12" action="" method="POST">
+            {% csrf_token %}
+            <div class="input-field">
+                <input id="name" type="text" name="username">
+                <label for="name">Name or Business Name</label>
+            </div>
+            <div class="input-field">
+                <input id="email" type="email" name="email">
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field">
+                <input id="password" type="password" name="password">
+                <label for="password">Password</label>
+            </div>
+            <div class="input-field">
+                <input id="password2" type="password" name="password2">
+                <label for="password2">Confirm Password</label>
+            </div>
+            <p>
+                <label>
+                    <input id="indeterminate-checkbox" type="checkbox" required/>
+                    <span>Terms and Conditions</span>
+                </label>
+            </p>
+            <button type="submit" class="waves-effect blue-grey darken-3 waves-light btn">Join</button>
+            <div class="center">
+                <p class="text-base"> Do you have an account? <a href="/login"> Login </a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

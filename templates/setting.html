@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+<div class="container"> 
+    <div class="row">
+        <div>
+            <h3>{{user.username}} </h3>
+        </div>
+        <div class="s12 m12">
+            
+            <form action="" method="POST" enctype="multipart/form-data">
+                
+                {% csrf_token %}
+                <h5>Register as a business</h5>
+                
+                <img width="100" src="{{user_profile.profile_img.url}}" >
+                <div class="file-field input-field">
+                    <div class="btn wave-btn blue-grey darken-3">
+                        <span>Profile Image</span>
+                        <input type="file" name="image" id="image">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="input-field">
+                    <textarea id="info" name="info" class="materialize-textarea">{{user_profile.info}}</textarea>
+                    <label for="info">Bio</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" name="location" value="{{user_profile.location}}">
+                    <label for="location">Location</label>
+                </div>
+                
+                <div class="right">
+                    <button class="btn wave-btn yellow darken-4"><a class="white-text" href="/">Cancel </a></button>
+                    <button type="submit" class="btn wave-btn blue-grey darken-3"> Save </button>
+                </div>
+            </form>  
+            
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

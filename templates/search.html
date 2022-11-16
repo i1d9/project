@@ -1,0 +1,93 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class=""></div>
+{% for elems in combined_list %}
+
+{% if elems.title %}
+<div class="row">
+    <div class="col m2"></div>
+    <div class="col s12 m7">
+        <div onclick='location.href="/post/{{elems.id}}";' class="card horizontal hide-on-med-and-down">
+            <div class="card-image">
+                <img src="{{elems.image.url}}">
+                <span class="card-title">{{elems.title}}</span>
+            </div>
+            <div class="card-stacked blue-grey darken-1">
+                <div class="card-content">
+                    <p class="card-title white-text">{{elems.category}}</p>
+                    <p class="card-title grey-text text-lighten-3">Ksh: {{elems.price}}</p>
+                    <p class="paragraph-length2 grey-text text-lighten-3">{{elems.description}}</p>
+                </div>
+                <div class="card-action" style="padding: 16px;">
+                    <span class="material-icons white-text">{% if elems.average_rating > 0 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 1 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 2 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 3 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 4 %} star {% else %} star_border {% endif %}</span>
+              </div>
+            </div>
+        </div>
+
+        <div onclick='location.href="/post/{{elems.id}}";' class="card hide-on-large-only">
+            <div class="card-image">
+                <img src="{{elems.image.url}}">
+                <span class="card-title">{{elems.title}}</span>
+            </div>
+            <div class="card-stacked blue-grey darken-1">
+                <div class="card-content">
+                    <p class="card-title white-text">{{elems.category}}</p>
+                    <p class="card-title grey-text text-lighten-3">Ksh: {{elems.price}}</p>
+                    <p class="paragraph-length2 grey-text text-lighten-3">{{elems.description}}</p>
+                </div>
+                <div class="card-action" style="padding: 16px;">
+                    <span class="material-icons white-text">{% if elems.average_rating > 0 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 1 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 2 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 3 %} star {% else %} star_border {% endif %}</span>
+                    <span class="material-icons white-text">{% if elems.average_rating > 4 %} star {% else %} star_border {% endif %}</span>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif elems.profile_img %}
+<div class="row">
+    <div class="col m2"></div>
+    <div class="col s12 m7">
+        <a href="/profile/{{elems.user}}" class="card horizontal">
+            <div class="card-image blue-grey darken-1">
+                <img src="{{elems.profile_img.url}}">
+                <span class="card-title">{{elems.user}}</span>
+            </div>
+            <div class="card-stacked blue-grey darken-1">
+                <div class="card-content">
+                    <p class="grey-text text-lighten-3">Address: {{elems.location}}</p>
+                    <p class="paragraph-length2 grey-text text-lighten-3">{{elems.info}}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% empty %}
+<div class="row">
+    <div class="col m2"></div>
+    <div class="col s12 m7">
+        <div class="card horizontal center">
+            <div class="card-image red darken-1 white-text">
+                <i style="margin-left: 50px;" class="material-icons center large">mood_bad</i>
+            </div>
+            <div class="card-stacked red darken-1">
+                <div class="card-content center">
+                    <span class="card-title white-text"> Sorry, No such Item Found</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endfor %}
+</div> 
+
+{% endblock %}

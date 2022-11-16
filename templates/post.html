@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="grid"
+      data-aos="fade-right"
+      data-aos-offset="200"
+      data-aos-delay="50"
+      data-aos-duration="1000"
+      data-aos-easing="ease-in-out"
+      data-aos-mirror="true"
+      data-aos-once="false"
+      data-aos-anchor-placement="top-center">
+
+      <div class="grid-sizer" style="display: none;">
+        <div class="card">
+          <div class="card-image">
+            <img src="../media/blank-profile-picture.png">
+            <span class="card-title">???</span>
+          </div>
+          <div class="card-content">
+            <span class="card-title activator ">Ksh 000</span>
+            <p>{This is a dummy card used as an initializier</p>
+          </div>
+        </div>
+      </div>
+
+      {% for post in posts %}
+
+      <div class="grid-item" 
+        data-aos="fade-up"
+        data-aos-anchor-placement="top-top"
+        data-aos-offset="-600">
+        <div onclick='location.href="post/{{post.id}}";' class="card">
+          <div class="card-image">
+            <img src="{{post.image.url}}">
+            <span class="card-title" style="background-color: rgba(0, 0, 0, 0.2);">{{post.title}}</span>
+          </div>
+          <div class="card-content">
+            <span class="card-title  blue-grey-text text-darken-3">{{post.user}}</span>
+            <span class="blue-grey-text text-darken-3">Category: {{post.category}}</span>
+            <br>
+            <span class="blue-grey-text text-darken-3">Ksh {{post.price}}</span>
+            <br>
+            <p class="paragraph-length grey-text text-darken-2">{{post.description}}</p>
+          </div>
+          <div class="card-action" style="padding: 16px;">
+                <span class="material-icons">{% if post.average_rating > 0 %} star {% else %} star_border {% endif %}</span>
+                <span class="material-icons">{% if post.average_rating > 1 %} star {% else %} star_border {% endif %}</span>
+                <span class="material-icons">{% if post.average_rating > 2 %} star {% else %} star_border {% endif %}</span>
+                <span class="material-icons">{% if post.average_rating > 3 %} star {% else %} star_border {% endif %}</span>
+                <span class="material-icons">{% if post.average_rating > 4 %} star {% else %} star_border {% endif %}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

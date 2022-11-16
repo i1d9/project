@@ -1,0 +1,118 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<form class="col s12 form-upload" method="POST"  enctype="multipart/form-data" style="margin-top: 100px;">
+  {% csrf_token %}
+  <h3>Share your business</h3>
+  <div class="input-field">
+    <label>Product/Service</label>
+    <input type="text" required id="title" name="title" class="">
+  </div>
+  <div class="input-field col s12">
+    <select id="category" name="category" required>
+      <option value="" disabled selected>Select category</option>
+      <option value="food">Food</option>
+      <option value="construction">Construction</option>
+      <option value="beauty and health">Beauty & Health</option>
+      <option value="service">Services</option>
+      <option value="clothing">Clothing</option>
+      <option value="electronics">Electronics</option>
+      <option value="furniture">Furniture</option>
+      <option value="holidays">Holidays</option>
+      <option value="automotive">Automotive</option>
+      <option value="agriculture">Agriculture</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div class="input-field">
+    <label>Price in Ksh</label>
+    <input type="number" required id="price" name="price" class="">
+  </div>
+  <div class="input-field">
+    <textarea id="description" name="description" class="materialize-textarea"></textarea>
+    <label for="description">Description</label>
+  </div>
+  <div class="file-field input-field">
+    <div class="btn">
+      <span>Choose Image</span>
+      <input type="file" id="image" name="image">
+    </div>
+    <div class="file-path-wrapper">
+      <input class="file-path validate" type="text">
+    </div>
+  </div>
+  <a href="javascript:void(0);" id="add-image" class="add_button btn wave-btn blue-grey darken-1" title="Add field">Add Image<i class="material-icons right">add</i></a>
+  <button type="submit" class="btn blue-grey darken-2">Submit</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+  // var formData = new FormData();
+  
+  // $(document).on('click', '#submit', function(e) {
+  //   formData.append('category', $('#category').val())
+  //   formData.append('title', $('#title').val())
+  //   formData.append('price', $('#price').val())
+  //   formData.append('description', $('#description').val())
+  //   formData.append('image',  $('#image')[0].files[0])
+  //   formData.append('action', 'upload')
+  //   formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+  //   $.ajax({
+  //     type: 'POST',
+  //     url: '{% url "upload" %}',
+  //     data: formData,
+  //     cache: false,
+  //     processData: false,
+  //     contentType: false,
+  //     enctype: 'multipart/form-data',
+  //     success: function (){
+  //       console.log('Upload successful!')
+  //       window.location.href = "/";
+  //     },
+  //     error: function(xhr, errmsg, err) {
+  //       console.log(xhr.status + ":" + xhr.responseText)
+  //     }
+  //   })
+  // })
+
+  $(document).ready(function(){
+    var maxField = 10; //Input fields increment limitation
+    var addButton = $('.add_button'); //Add button selector
+    var wrapper = $('.form-upload'); //Input field wrapper
+    var fieldHTML = '<div class="file-field input-field">\
+                      <div class="btn">\
+                        <span>Choose Image</span>\
+                        <input type="file" id="image" name="images[]" value=""/>\
+                      </div>\
+                      <div class="file-path-wrapper">\
+                        <div class="file-path-wrapper">\
+                          <input class="file-path validate" type="text">\
+                        </div>\
+                        <span>\
+                          <a href="javascript:void(0);" class="remove_button right btn wave-btn yellow darken-1 blue-grey-text text-darken-2">\
+                            Delete<i class="material-icons right">delete</i>\
+                          </a>\
+                        </span>\
+                      </div>\
+                    </div>'; //New input field html 
+    var x = 1; //Initial field counter is 1
+    
+    //Once add button is clicked
+    $(addButton).click(function(){
+        //Check maximum number of input fields
+        if(x < maxField){ 
+            x++; //Increment field counter
+
+            $(fieldHTML).insertBefore( "#add-image" ); //Add field html
+        }
+    });
+    
+    //Once remove button is clicked
+    $(wrapper).on('click', '.remove_button', function(e){
+        e.preventDefault();
+        $(this).parent().parent().parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+});
+</script>
+</script>
+{% endblock %}

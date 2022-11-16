@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h4>My Orders</h4>
+{% for order in orders %}
+    <div class="row">
+        <div class="col m2"></div>
+        <div class="col s12 m7">
+            {% for item in order.items.all %}
+                <div class="card horizontal blue-grey darken-1">
+                    <div class="card-image">
+                        <img src="{{item.item.image.url}}">
+                    </div>
+                    <div class="card-stacked blue-grey darken-1">
+                        <div class="card-content">
+                            <p class="card-title white-text">{{item}}</p>
+                            <p class="card-title grey-text text-lighten-3">Total Ksh: {% widthratio item.item.price 1 item.quantity %}</p>
+                            <p class="paragraph-length2 grey-text text-lighten-3">Delivery Address <b>{{order.address}}</b></p>
+                            <p class="paragraph-length2 grey-text text-lighten-3">Ordered Date <b>{{order.ordered_date}}</b></p>
+                            <p class="grey-text text-lighten-3">Status: 
+                            {% if item.confirmed %} 
+                                <span class="btn disabled right"><i class="material-icons left">check</i>Confirmed</span>
+                            {% else %}
+                                <span class="btn disabled">Not yet confirmed</span>
+                            {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

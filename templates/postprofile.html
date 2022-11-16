@@ -1,0 +1,220 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div data-aos="fade-right"
+	data-aos-anchor-placement="top-bottom"
+	class="container">
+	<div class="carousel">
+		<img id="car-image" src="{{post.image.url}}">
+		{% for image in post_images %}
+		<img id="car-image" src="{{image.images.url}}">
+		{% endfor %}
+	</div>
+</div>
+<br>
+<div data-aos="fade-right"
+	data-aos-anchor-placement="top-bottom"
+	class="row profile-row">
+	<div class="col s12 m7">
+		<div class="card-panel">
+			<br>
+			{{ post.get_quantity_in_chart }}
+			<a href="{{ post.get_remove_from_cart_url }}" class="waves-effect waves-light btn yellow darken-3 right" >Remove From cart
+				<i class="material-icons white-text right">remove_shopping_cart</i>
+			</a>
+		
+			<a href="{{ post.get_add_to_cart_url }}" class="waves-effect waves-light btn blue-grey darken-3 right" style="margin-right: 10px">Add to cart
+				<i class="material-icons white-text right">add_shopping_cart</i>
+			</a>
+			
+			
+			<span class="card-title grey-text text-darken-3 profile-name">{{post.title}}</span>
+			<span class="black-text">
+				<div class="post-price grey-text text-darken-1">Ksh: <span class="grey-text text-darken-3">{{post.price}}</span></div>
+			</span>
+			
+			<span class="black-text">
+				<div class="post-price grey-text text-darken-1">Account: <span><a class="blue-grey-text text-darken-3" href="/profile/{{post.user}}">{{post.user}}</a></span></div>
+			</span>
+		
+			<div class="card-action">
+				<p class="card-title">
+					{% if post.average_rating == 0 %} 
+					Item has not yet been rated:
+					{% elif post.average_rating == 5 %}
+					Average Rating:  <span class="material-icons medium">star</span><span>{{post.average_rating}}</span>
+					{% else %}
+					Average Rating: <span class="material-icons">star_half</span><span>{{post.average_rating|floatformat }}</span>
+					{% endif %}</p>
+					
+					{% if request.user.is_authenticated %}
+					<p>Please rate this item</p>
+					<ul>
+						<span onclick="rate(1, '{{ post.id }}')">
+							<i class="material-icons" title="Rate 1">{% if post.average_rating > 0 %} star {% else %} star_border {% endif %}</i></span>
+						<span onclick="rate(2, '{{ post.id }}')">
+							<i class="material-icons" title="Rate 2">{% if post.average_rating > 1 %} star {% else %} star_border {% endif %}</i></span>
+						<span onclick="rate(3, '{{ post.id }}')">
+							<i class="material-icons" title="Rate 3">{% if post.average_rating > 2 %} star {% else %} star_border {% endif %}</i></span>
+						<span onclick="rate(4, '{{ post.id }}')">
+							<i class="material-icons" title="Rate 4">{% if post.average_rating > 3 %} star {% else %} star_border {% endif %}</i></span>
+						<span onclick="rate(5, '{{ post.id }}')">
+							<i class="material-icons" title="Rate 5">{% if post.average_rating > 4 %} star {% else %} star_border {% endif %}</i></span>
+					</ul>
+					{% endif %}
+			</div>
+									
+			<span class="black-text">
+				<div class="post-price medium grey-text text-darken-1">Description</span></div>
+			</span>
+			
+			<span class="black-text">
+				<span class="grey-text text-darken-3">{{post.description}}</span>
+			</span>
+			
+			{% if post.user == str_user %}
+			<a href="/delete/{{post.id}}" class="btn right wave-btn red draken-2">Delete Post</a>
+			{% endif %}
+		</div>	
+	</div>
+
+	<div class="col s12 m5">
+		<div class="row">
+			<div class="col s12">
+				<div class="card-panel">
+					<h5>Comments</h5>
+					<form class="col s12" method="POST">
+						{% csrf_token %}
+						<div class="row">
+						<div class="input-field col s10">
+							<textarea id="textarea1" name="comment" class="materialize-textarea" required></textarea>
+							<label for="textarea1">Type your comment ere</label>
+						</div>
+						<button class="col s2 btn wave-btn yellow darken-2" type="submit">
+							<i class="material-icons blue-grey-text text-darken-2">send</i>
+						</button>
+						</div>
+					</form>
+					<p>Other comments</p>
+					<div style="height: 110px; overflow-x: hidden; overflow-y: auto; text-align:justify;">
+						{% for comment in comments %}
+							<div>
+								<span><b>{{comment.user}}</b>: {{comment.comment}}<span class="right grey-text grey-darken-1">{{comment.commented_on}}</span></span>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+							
+</div>
+					
+<script>
+	function averageColor(imageElement) {
+		
+		// Create the canvas element
+		var canvas
+		= document.createElement('canvas'),
+		
+		// Get the 2D context of the canvas
+		context
+		= canvas.getContext &&
+		canvas.getContext('2d'),
+		imgData, width, height,
+		length,
+		
+		// Define variables for storing
+		// the individual red, blue and
+		// green colors
+		rgb = { r: 0, g: 0, b: 0 },
+		
+		// Define variable for the
+		// total number of colors
+		count = 0;
+		
+		// Set the height and width equal
+		// to that of the canvas and the image
+		height = canvas.height =
+		imageElement.naturalHeight ||
+		imageElement.offsetHeight ||
+		imageElement.height;
+		width = canvas.width =
+		imageElement.naturalWidth ||
+		imageElement.offsetWidth ||
+		imageElement.width;
+		
+		// Draw the image to the canvas
+		context.drawImage(imageElement, 0, 0);
+		
+		// Get the data of the image
+		imgData = context.getImageData(
+		0, 0, width, height);
+		
+		// Get the length of image data object
+		length = imgData.data.length;
+		
+		for (var i = 0; i < length; i += 4) {
+			
+			// Sum all values of red colour
+			rgb.r += imgData.data[i];
+			
+			// Sum all values of green colour
+			rgb.g += imgData.data[i + 1];
+			
+			// Sum all values of blue colour
+			rgb.b += imgData.data[i + 2];
+			
+			// Increment the total number of
+			// values of rgb colours
+			count++;
+		}
+		
+		// Find the average of red
+		rgb.r
+		= Math.floor(rgb.r / count);
+		
+		// Find the average of green
+		rgb.g
+		= Math.floor(rgb.g / count);
+		
+		// Find the average of blue
+		rgb.b
+		= Math.floor(rgb.b / count);
+		
+		return rgb;
+	}
+	
+	// Function to set the background
+	// color of the second div as
+	// calculated average color of image
+	var rgb;
+	
+	setTimeout(() => {
+		rgb = averageColor(
+		document.getElementById('car-image'));
+		
+		// Select the element and set its
+		// background color
+		document
+		.getElementById("profile-container")
+		.style.backgroundColor =
+		'rgb(' + rgb.r + ','
+		+ rgb.g + ','
+		+ rgb.b + ')';
+	}, 500)
+	
+	const rate = (rating, post_id) => {
+		fetch(`/post/${post_id}/${rating}/`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(rest => {
+			window.location.reload();
+		})
+	}
+</script>
+
+{% endblock %}

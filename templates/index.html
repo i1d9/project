@@ -1,0 +1,216 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'favicon.png' %}" rel="icon" type="image/png">
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+</head>
+
+<body id="profile-container">
+    <div 
+        data-aos="fade-down"
+        data-aos-anchor-placement="top-bottom"
+        class="navbar-fixed">
+        <nav>
+            <div id="nav-wrapper" class="nav-wrapper blue-grey darken-3">
+                <a href="/" class="brand-logo left" style="margin-left: 20px;">
+                    <span><img width="65px" src="{% static 'assets/bpap.svg' %}" ></span>
+                </a>
+                
+                <ul class="right hide-on-med-and-down">
+                    {% if admin != True %}
+                        <li {% if request.path == '/' %} style="display: block;" 
+                            {% elif request.path == '/search'  %} style="display: block;"
+                            {% else %} style="display: none;" {% endif %}><a><i class="material-icons search-icon">search</i></a></li>
+                        <li><a href="/upload"><i class="material-icons left">add_circle</i>Upload</a></li>
+                        <li><a href="/order-summary"><i class="material-icons left">shopping_cart</i>Cart</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li><a href="/my-orders">
+                                <i class="material-icons left">shopping_basket</i>
+                                My Orders
+                            </a></li>
+                            {% if user_profile.is_business %}
+                                <li><a href="/customer-orders">
+                                    <i class="material-icons left">store</i>
+                                    My Store
+                                    {% if customer_orders %}
+                                        <span class="new badge yellow darken-2 blue-grey-text text-darken-2"></span>
+                                    {% endif %}
+                                </a></li>
+                            {% endif %}
+                            <li><a href="/profile/{{user_profile.user}}">
+                                <div class="chip">
+                                    <img src="{{user_profile.profile_img.url}}">
+                                    {{user_profile}}
+                                </div>
+                                </a>
+                            </li>  
+                            {% else %}
+                                <li><a href="/login">Login</a></li>
+                        {% endif %}
+                    {% else %}
+                    <li><a href="/users">
+                        Users
+                        </a>
+                    </li>
+                    <li><a href="/transactions">
+                        Transactions
+                        </a>
+                    </li>
+                    <li><a href="/logout">
+                            logout
+                        </a>
+                    </li>
+                    {% endif %}  
+                </ul>
+
+                <ul class="right hide-on-large-only">
+                    {% if request.user.is_staff%}
+                    <li><a href="/logout">
+                        logout
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                    <li><a href="/profile/{{user_profile.user}}">
+                        <div class="chip">
+                            <img src="{{user_profile.profile_img.url}}">
+                            {{user_profile}}
+                          </div>
+                        </a>
+                    </li>
+                        
+                    {% else %}
+                        <li><a href="/login">Login</a></li>
+                    {% endif %}
+                </ul>
+                </div>
+                <div class="nav-wrapper blue-grey darken-3 search-nav">
+                    <form action="search" method="POST">
+                        {% csrf_token %}
+                        <div class="input-field">
+                            <input id="search" name="search" type="search" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons" id="close">close</i>
+                        </div>
+                </form>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="container custom-width">
+            {% if messages %}
+                {% for message in messages %}
+                        <div class="yellow darken-2">
+                            <a class="center" style="margin: 5px;"><h4 class="white-text">{{ message }}</h4></a>
+                        </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="fixed-action-btn hide-on-large-only">
+            <a class="btn-floating btn-large yellow darken-2">
+              <i class="large material-icons blue-grey-text text-darken-3">mode_edit</i>
+            </a>
+            <ul>
+                {% if request.user.is_staff %}
+                <li><a href="/upload" class="btn-floating blue-grey darken-2"><i class="material-icons">group</i></a></li>
+                <li><a href="/transactions" class="btn-floating blue-grey darken-2"><i class="material-icons">format_list_bulleted</i></a></li>
+                {% else %}
+                <li><a href="/upload" class="btn-floating blue-grey darken-2"><i class="material-icons">add</i></a></li>
+                <li {% if request.path == '/' %} style="display: block;" 
+                    {% elif request.path == '/search'  %} style="display: block;"
+                    {% else %} style="display: none;" {% endif %}><a class="btn-floating blue-grey darken-2 search-icon"><i class="material-icons">search</i></a></li>
+                    <li><a href="/my-orders" class="btn-floating blue-grey darken-2"><i class="material-icons left">shopping_basket</i></a></li>
+                    <li><a href="/customer-orders" class="btn-floating blue-grey darken-2"><i class="material-icons left">store</i></a></li>
+                <li><a href="/order-summary" class="btn-floating blue-grey darken-2"><i class="material-icons">shopping_cart</i></a></li>
+                <li><a href="/" class="btn-floating blue-grey darken-2"><i class="material-icons">home</i></a></li>
+
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <footer class="page-footer transparent">
+            <div class="footer-copyright grey darken-4">
+              <div class="container footer-container">
+              © 2022 Copyright Biashara Pap!
+              <a class="grey-text text-lighten-4 right" href="#!">Terms and Conditions</a>
+              </div>
+            </div>
+        </footer>
+        
+        <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>      
+        <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="{% static 'assets/js/custom.js' %}"></script>
+        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+        <script>
+            // Initialize materialize forms
+            $(document).ready(function(){
+                $('select').formSelect({
+                    // specify options here
+                });
+            })
+            
+            $('.grid').masonry({
+                // set itemSelector so .grid-sizer is not used in layout
+                itemSelector: '.grid-item',
+                // use element for option
+                columnWidth: '.grid-sizer',
+                percentPosition: true
+            })
+
+            // Initialize Animate on Scroll
+            AOS.init();
+
+            // Initialize floating button
+            $(document).ready(function(){
+                $('.fixed-action-btn').floatingActionButton();
+            });
+
+            // Display and Focus search input
+            $(".search-icon").click(function() {
+                console.log("Clicked!!!")
+                $(".search-nav").css("display", "block");
+                $("#search").focus();
+            });
+
+            // Hide search input
+            $( "#close" ).click(function() {
+                $(".search-nav").css("display", "none");
+            });
+
+            //Initialize Flickity
+            $('.carousel').flickity({
+                // options
+                wrapAround: true,
+                percentPosition: false,
+                autoPlay: true
+            });
+
+            //Initialize Tabs
+            $(document).ready(function(){
+                $('.tabs').tabs();
+            });
+        </script>
+    </body>
+    </html>

@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h4>Current Customer Orders</h4>
+<div class="row">
+    <div class="col m2"></div>
+    <div class="col s12 m7">
+        {% for order in orders %}
+        <div class="card horizontal blue-grey darken-1">
+            <div class="card-image">
+                <img src="{{order.item.image.url}}">
+            </div>
+            <div class="card-stacked blue-grey darken-1">
+                <div class="card-content">
+                    <p class="card-title white-text">{{order}}</p>
+                    <p class="grey-text text-lighten-3">Total Ksh: {% widthratio order.item.price 1 order.quantity %}</p>
+                    <p class="paragraph-length2 grey-text text-lighten-3">Phone No: <b>{{order.contact}}</b></p>
+                    <p class="paragraph-length2 grey-text text-lighten-3">Delivery Address: <b>{{order.address}}</b></p>
+                    <p class="paragraph-length2 grey-text text-lighten-3">Ordered Date: <b>{{order.ordered_date}}</b></p>
+                </div>
+            </div>
+        </div>
+        {% if order.confirmed == False %}
+        <a href="{{ order.get_confirm_order }}" class="right btn wave-btn blue-grey darken-1 yellow-text text-darken-2">Confirm Order</a>
+        {% else %}
+        <button class="disabled right btn wave-btn "><i class="material-icons left">check</i>Confirmed</button>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

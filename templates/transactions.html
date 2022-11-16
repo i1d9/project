@@ -1,0 +1,43 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<br>
+<h4>Transactions</h4>
+<br>
+
+<table>
+    <thead>
+      <tr>
+          <th>Item</th>
+          <th>Buyer</th>
+          <th>Seller</th>
+          <th>Quantity</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Total Cost</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{order.item}}</td>
+            <td>{{order.user}}</td>
+            <td>{{order.store}}</td>
+            <td>{{order.quantity}}</td>
+            <td>
+              {% if order.confirmed == True %}
+                Confirmed
+              {% else %}
+                Not yet confirmed
+              {% endif %}
+            </td>
+            <td>{{order.ordered_date}}</td>
+            <td>Ksh {% widthratio order.item.price 1 order.quantity %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
