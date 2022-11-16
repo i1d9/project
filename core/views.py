@@ -493,9 +493,3 @@ def transactions(request):
     else:
         messages.info(request, "You do not have access to that Page")
         return redirect('/')
-
-def handler404(request, *args, **argv):
-    response = render_to_response('404.html', {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 404
-    return response
